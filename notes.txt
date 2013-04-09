@@ -1,0 +1,5 @@
+http://api.geonames.org/postalCodeSearchJSON?&placename=MN&maxRows=500&username=rohn&startRow=500
+
+http://www.geonames.org/export/geonames-search.html
+
+http://www.geonames.org/export/web-services.html#postalCodeSearch

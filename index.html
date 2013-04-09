@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Postal Angular Demo</title>
+        <link rel="stylesheet" href="css/bootstrap.css">
+        <script src="js/jquery-1.8.3.min.js" type="text/javascript"></script>
+        <script src="js/angular.min.js" type="text/javascript"></script>
+        <script src="js/myApp.js" type="text/javascript"></script>
+    </head>
+    <body ng-app="postalCodeApp">
+        <div class="container">
+            <p/>
+            <div class="hero-unit">
+                <h2>Postal Codes - Angular Demo</h2>
+            </div>
+
+            <div class="row">
+                <div class="span12">
+                    <p>
+                        <div id="ClearPostalCodeCtrl" ng-controller="ClearPostalCodeCtrl">
+                            <button id="clearPostalCodesButton" class="btn btn-large" ng-click="causeClearPostalCodes()">Clear Postal Codes</button>
+                        </div>
+                    </p>
+                    <div id="PostalCodeCtrl" ng-controller="PostalCodeCtrl" >
+                        <p><button class="btn btn-primary btn-large" ng-click="getPostalCodes()">Get Postal Code JSON Data</button></p>
+                        <h3>Alphabetical States</h3>
+                        Sorted by abbreviation since in the JSON file they are alphabetical by state name. Wanted to prove that I sorted them.
+                        <ul>
+                            <li ng-repeat="state in otherValue">
+                                <span>{{state.Abbreviation}} {{state.State}}</span>
+                            </li>
+                        </ul>
+                        <h3>TODO: Tag cloud of states by number of zip codes</h3>
+                        <ul>
+                            <li ng-repeat="postalCode in postalCodeList">
+                                <span>{{postalCode.postalCode}} | {{postalCode.placeName}} | {{postalCode.adminCode1}}</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div> <!-- span12 -->
+            </div> <!-- row -->
+        </div> <!-- container -->
+    </body>
+</html>
