@@ -15,7 +15,7 @@ app.controller('ClearPostalCodeCtrl', function($scope) {
 app.controller('PostalCodeCtrl', function($scope) {
 
     $scope.postalCodeList = [];
-    $scope.otherValue = "";
+    $scope.allStates = "";
 
     $scope.$on('broadcastClear', function() {
         $scope.clearPostalCodes();
@@ -27,7 +27,7 @@ app.controller('PostalCodeCtrl', function($scope) {
 
     $scope.clearPostalCodes = function() {
         $scope.postalCodeList = {};
-        $scope.otherValue = {};
+        $scope.allStates = {};
         $("#wordcloud").empty();
     };
 
@@ -43,8 +43,8 @@ app.controller('PostalCodeCtrl', function($scope) {
             data: {},
             success: function(data) {
                 $scope.$apply(function() {
-                    $scope.otherValue = data;
-                    $scope.otherValue.sort(compare);
+                    $scope.allStates = data;
+                    $scope.allStates.sort(compare);
                     getcodes();
                 });
             }
@@ -60,7 +60,7 @@ app.controller('PostalCodeCtrl', function($scope) {
                     $scope.$apply(function() {
                         var postalCodeForState = parsePostalCodeData(res);
                         var thisIndex = getStateIndex(res);
-                        $scope.otherValue[thisIndex]['totalPostalCodes'] = postalCodeForState;
+                        $scope.allStates[thisIndex]['totalPostalCodes'] = postalCodeForState;
                     });
                 }
             });
@@ -70,8 +70,8 @@ app.controller('PostalCodeCtrl', function($scope) {
             // now let's iterate through all states and get
             // ourselves some postal code counts
             var promises = [];
-            for (var i = 0, l = $scope.otherValue.length; i < l; i++) {
-                var stateAbbreviation = $scope.otherValue[i].Abbreviation;
+            for (var i = 0, l = $scope.allStates.length; i < l; i++) {
+                var stateAbbreviation = $scope.allStates[i].Abbreviation;
                 promises.push(getZipsForState(stateAbbreviation));
             };
             $.when.apply($, promises).done(function() {
@@ -82,10 +82,10 @@ app.controller('PostalCodeCtrl', function($scope) {
         getStateIndex = function(response) {
             var indexOfState = 0;
             var thisState = $(response).find('adminCode1').eq(0).text();
-            var foundState = _.find($scope.otherValue, function(obj) {
+            var foundState = _.find($scope.allStates, function(obj) {
                 return obj.Abbreviation === thisState;
             });
-            indexOfState = $scope.otherValue.indexOf(foundState);
+            indexOfState = $scope.allStates.indexOf(foundState);
             return indexOfState;
         };
 
@@ -103,11 +103,11 @@ app.controller('PostalCodeCtrl', function($scope) {
 
         createCloud = function() {
             var state_list = [];
-            for (var i = 0, l = $scope.otherValue.length; i < l; i++) {
-                if ($scope.otherValue[i].hasOwnProperty('totalPostalCodes')) {
+            for (var i = 0, l = $scope.allStates.length; i < l; i++) {
+                if ($scope.allStates[i].hasOwnProperty('totalPostalCodes')) {
                     state_list.push({
-                        text: $scope.otherValue[i].State,
-                        weight: $scope.otherValue[i].totalPostalCodes
+                        text: $scope.allStates[i].State,
+                        weight: $scope.allStates[i].totalPostalCodes
                     });
                 }
             };
