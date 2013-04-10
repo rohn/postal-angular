@@ -4,6 +4,7 @@ app.run(function($rootScope) {
     $rootScope.$on('requestClear', function() {
         $rootScope.$broadcast('broadcastClear');
     });
+    $(".alert").hide();
 });
 
 app.controller('ClearPostalCodeCtrl', function($scope) {
@@ -32,6 +33,8 @@ app.controller('PostalCodeCtrl', function($scope) {
     };
 
     $scope.getPostalCodes = function() {
+        $(".alert").addClass("in");
+        $(".alert").show();
         // first let's get states and their abbreviations
         // we're doing this one locally until I can find
         // a good API call to make
@@ -112,6 +115,7 @@ app.controller('PostalCodeCtrl', function($scope) {
                 }
             };
             $("#wordcloud").jQCloud(state_list);
+            $(".alert").hide();
         }
     };
 
