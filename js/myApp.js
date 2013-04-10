@@ -49,27 +49,33 @@ app.controller('PostalCodeCtrl', function($scope) {
             }
         });
 
+        getZipsForState = function(stateAbbreviation){
+            var stateURL = 'http://api.geonames.org/postalCodeSearch?&placename=' + stateAbbreviation + '&country=US&username=rohn';
+            return $.ajax({
+                url: stateURL,
+                type: 'GET',
+                res: {},
+                success: function(res) {
+                    $scope.$apply(function() {
+                        var postalCodeForState = parsePostalCodeData(res);
+                        var thisIndex = getStateIndex(res);
+                        $scope.otherValue[thisIndex]['totalPostalCodes'] = postalCodeForState;
+                    });
+                }
+            });
+        };
+
         getcodes = function() {
             // now let's iterate through all states and get
             // ourselves some postal code counts
-            var stateURL;
-            for (var i = 0, l = $scope.otherValue.length; i < 2; i++) {
+            var promises = [];
+            for (var i = 0, l = $scope.otherValue.length; i < l; i++) {
                 var stateAbbreviation = $scope.otherValue[i].Abbreviation;
-                stateURL = 'http://api.geonames.org/postalCodeSearch?&placename=' + stateAbbreviation + '&country=US&username=rohn';
-                $.ajax({
-                    url: stateURL,
-                    type: 'GET',
-                    res: {},
-                    success: function(res) {
-                        $scope.$apply(function() {
-                            var postalCodeForState = parsePostalCodeData(res);
-                            var thisIndex = getStateIndex(res);
-                            $scope.otherValue[thisIndex]['totalPostalCodes'] = postalCodeForState;
-                        });
-                    }
-                });
+                promises.push(getZipsForState(stateAbbreviation));
             };
-            createCloud();
+            $.when.apply($, promises).done(function() {
+                createCloud();
+            });
         };
 
         getStateIndex = function(response) {
