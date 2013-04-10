@@ -4,7 +4,10 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Postal Angular Demo</title>
         <link rel="stylesheet" href="css/bootstrap.css">
+        <link rel="stylesheet" href="css/jqcloud.css">
         <script src="js/jquery-1.8.3.min.js" type="text/javascript"></script>
+        <script src="js/jqcloud-1.0.3.js" type="text/javascript"></script>
+        <script src="js/underscore.js" type="text/javascript"></script>
         <script src="js/angular.min.js" type="text/javascript"></script>
         <script src="js/myApp.js" type="text/javascript"></script>
     </head>
@@ -28,6 +31,7 @@
                             <div class="span6">
                                 <h3>Alphabetical States</h3>
                                 Sorted by abbreviation since in the JSON file they are alphabetical by state name. Wanted to prove that I sorted them.
+                                <p/>
                                 <ul>
                                     <li ng-repeat="state in otherValue">
                                         <span>{{state.Abbreviation}} {{state.State}}</span>
@@ -35,17 +39,22 @@
                                 </ul>
                             </div>
                             <div class="span6">
-                                <h3>TODO: Tag cloud of states by number of zip codes</h3>
-                                <ul>
-                                    <li ng-repeat="postalCode in postalCodeList">
-                                        <span>{{postalCode.postalCode}} | {{postalCode.placeName}} | {{postalCode.adminCode1}}</span>
-                                    </li>
-                                </ul>
+                                <h3>Tag cloud of states</h3>
+                                weighted by number of zip codes
+                                <p/>
+                                <div id="wordcloud" style="width: 350px; height: 350px; position: relative;"></div>
                             </div>
                         </div>
                     </div>
                 </div> <!-- span12 -->
             </div> <!-- row -->
         </div> <!-- container -->
+        <div id="footer">
+            <div class="containter">
+                <p class="muted credit">Sample AngularJS App by
+                    <a href="http://intensiveporpoises.com">Rohn</a>.
+                </p>
+            </div>
+        </div>
     </body>
 </html>

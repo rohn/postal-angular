@@ -1,4 +1,3 @@
-
 var app = angular.module('postalCodeApp', []);
 
 app.run(function($rootScope) {
@@ -31,47 +30,82 @@ app.controller('PostalCodeCtrl', function($scope) {
         $scope.otherValue = {};
     };
 
-    $scope.getPostalCodes = function(){
+    $scope.getPostalCodes = function() {
+        // first let's get states and their abbreviations
+        // we're doing this one locally until I can find
+        // a good API call to make
         $.ajax({
-            type : 'POST',
-            // dataType : 'jsonp',
-            dataType : 'json',
-			contentType: "application/json; charset=utf-8",
-            // url: 'http://api.geonames.org/postalCodeSearchJSON?&maxRows=500&placename=MN&username=rohn',
-            url: 'postalcodes.json',
-            data: {},
-			success: function(data){
-				$scope.$apply(function(){ //necessary to $apply the changes
-					$scope.postalCodeList = data.postalCodes;
-				});
-			},
-            error : function(xhr, ajaxOptions, thrownError) {
-                alert( "Error: " + xhr.responseText + "\n" + thrownError );
-            }
-        });
-        $.ajax({
-            type : 'POST',
-            dataType : 'json',
+            type: 'POST',
+            dataType: 'json',
             contentType: "application/json; charset=utf-8",
             url: 'states.json',
             data: {},
             success: function(data) {
-                $scope.$apply(function(){
+                $scope.$apply(function() {
                     $scope.otherValue = data;
                     $scope.otherValue.sort(compare);
+                    getcodes();
                 });
             }
         });
-        compare = function(a,b) {
-            if (a.Abbreviation   < b.Abbreviation )
-                return -1;
-            if (a.Abbreviation   > b.Abbreviation )
-                return 1;
+
+        getcodes = function() {
+            // now let's iterate through all states and get
+            // ourselves some postal code counts
+            var stateURL;
+            for (var i = 0, l = $scope.otherValue.length; i < 2; i++) {
+                var stateAbbreviation = $scope.otherValue[i].Abbreviation;
+                stateURL = 'http://api.geonames.org/postalCodeSearch?&placename=' + stateAbbreviation + '&country=US&username=rohn';
+                $.ajax({
+                    url: stateURL,
+                    type: 'GET',
+                    res: {},
+                    success: function(res) {
+                        $scope.$apply(function() {
+                            var postalCodeForState = parsePostalCodeData(res);
+                            var thisIndex = getStateIndex(res);
+                            $scope.otherValue[thisIndex]['totalPostalCodes'] = postalCodeForState;
+                        });
+                    }
+                });
+            };
+            createCloud();
+        };
+
+        getStateIndex = function(response) {
+            var indexOfState = 0;
+            var thisState = $(response).find('adminCode1').eq(0).text();
+            var foundState = _.find($scope.otherValue, function(obj) {
+                return obj.Abbreviation === thisState;
+            });
+            indexOfState = $scope.otherValue.indexOf(foundState);
+            return indexOfState;
+        };
+
+        parsePostalCodeData = function(response) {
+            var totalPostalCodes = $(response).find('totalResultsCount').text();
+            return totalPostalCodes;
+        };
+
+        // custom sorter to sort the objects by the abbreviation property
+        compare = function(a, b) {
+            if (a.Abbreviation < b.Abbreviation) return -1;
+            if (a.Abbreviation > b.Abbreviation) return 1;
             return 0;
+        };
+
+        createCloud = function() {
+            var state_list = [];
+            for (var i = 0, l = $scope.otherValue.length; i < l; i++) {
+                if ($scope.otherValue[i].hasOwnProperty('totalPostalCodes')) {
+                    state_list.push({
+                        text: $scope.otherValue[i].State,
+                        weight: $scope.otherValue[i].totalPostalCodes
+                    });
+                }
+            };
+            $("#wordcloud").jQCloud(state_list);
         }
     };
 
 });
-
-
-
