@@ -32,11 +32,22 @@
                                 <h3>Alphabetical States</h3>
                                 Sorted by abbreviation since in the JSON file they are alphabetical by state name. Wanted to prove that I sorted them.
                                 <p/>
-                                <ul>
-                                    <li ng-repeat="state in otherValue">
-                                        <span>{{state.Abbreviation}} {{state.State}} {{state.totalPostalCodes}}</span>
-                                    </li>
-                                </ul>
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Abbrev.</th>
+                                            <th>State</th>
+                                            <th>Codes</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr ng-repeat="state in otherValue">
+                                            <td>{{state.Abbreviation}}</td>
+                                            <td>{{state.State}}</td>
+                                            <td>{{state.totalPostalCodes}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                             <div class="span6">
                                 <h3>Tag cloud of states</h3>

@@ -28,6 +28,7 @@ app.controller('PostalCodeCtrl', function($scope) {
     $scope.clearPostalCodes = function() {
         $scope.postalCodeList = {};
         $scope.otherValue = {};
+        $("#wordcloud").empty();
     };
 
     $scope.getPostalCodes = function() {
