@@ -33,7 +33,7 @@ app.controller('PostalCodeCtrl', function($scope) {
     };
 
     $scope.getPostalCodes = function() {
-        var usrname = $('input').val() || 'demo';
+        var username = $('input').val() || 'demo';
         $(".alert").addClass("in");
         $(".alert").show();
         // first let's get states and their abbreviations
