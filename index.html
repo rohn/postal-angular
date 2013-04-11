@@ -29,7 +29,11 @@
                         </div>
                     </p>
                     <div id="PostalCodeCtrl" ng-controller="PostalCodeCtrl" >
-                        <p><button class="btn btn-primary btn-large" ng-click="getPostalCodes()">Get Postal Code JSON Data</button></p>
+                        <p>
+                            <input type="text" placeholder="demo" id="username">
+                            <span class="help-block">Username to use for api.geonames.org</span>
+                            <button class="btn btn-primary btn-large" ng-click="getPostalCodes()">Get Postal Code JSON Data</button>
+                        </p>
                         <div class="row">
                             <div class="span6">
                                 <h3>Alphabetical States</h3>
@@ -59,7 +63,7 @@
                                 <div id="wordcloud" style="width: 350px; height: 350px; position: relative;"></div>
                             </div>
                         </div>
-                    </div>
+                    </div> <!-- PostalCodeCtrl -->
                 </div> <!-- span12 -->
             </div> <!-- row -->
         </div> <!-- container -->

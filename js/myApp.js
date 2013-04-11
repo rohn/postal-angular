@@ -33,6 +33,7 @@ app.controller('PostalCodeCtrl', function($scope) {
     };
 
     $scope.getPostalCodes = function() {
+        var usrname = $('input').val() || 'demo';
         $(".alert").addClass("in");
         $(".alert").show();
         // first let's get states and their abbreviations
@@ -54,7 +55,7 @@ app.controller('PostalCodeCtrl', function($scope) {
         });
 
         getZipsForState = function(stateAbbreviation){
-            var stateURL = 'http://api.geonames.org/postalCodeSearch?&placename=' + stateAbbreviation + '&country=US&username=rohn';
+            var stateURL = 'http://api.geonames.org/postalCodeSearch?&placename=' + stateAbbreviation + '&country=US&username=' + username;
             return $.ajax({
                 url: stateURL,
                 type: 'GET',
